@@ -18,10 +18,8 @@ let Box = styled.div`
   background : ${ props => props.bg == 'blue' ? 'white' : 'black' };
   padding : 20px;
 `
+let NewBtn = styled.button(YellowBtn);
 
-let NewBtn = styled.button`
-  padding : 30px;
-`
 
 function App() {
   let [shoes] = useState(data);
