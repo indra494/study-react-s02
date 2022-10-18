@@ -1,12 +1,30 @@
+/* eslint-disable */
+
 import { Button, Navbar, Container, Nav } from 'react-bootstrap'
 import {ProductList, ProductDetail} from './routes/Product'
+import { useState } from 'react'
+import styled from 'styled-components'
+import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
 import './App.css';
 import bg from './img/bg.png';
+import data from './data.js'
 
-import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
+let YellowBtn = styled.button`
+  background : ${ props => props.bg };
+  color : black;
+  padding : 10px;
+`
+let Box = styled.div`
+  background : ${ props => props.bg == 'blue' ? 'white' : 'black' };
+  padding : 20px;
+`
+
+let NewBtn = styled.button`
+  padding : 30px;
+`
 
 function App() {
-
+  let [shoes] = useState(data);
   let navigate = useNavigate();
 
   return (
@@ -23,9 +41,11 @@ function App() {
 
       <div className="main-bg" style={{ backgroundImage : 'URL(' + bg + ')' }}></div>
 
+      <Box><YellowBtn bg="blue" /></Box>
+      
       <Routes>
-        <Route path='/' element={<ProductList />} />        
-        <Route path='/detail' element={<ProductDetail />} />
+        <Route path='/' element={<ProductList shoes={shoes} />} />        
+        <Route path='/detail/:id' element={<ProductDetail shoes={shoes} />} />
         <Route path="/about" element={<About />} >
           { /* nasted routes ex) /about/member, /about/location */}
           <Route path="member" element={<div>멤버임</div>} />
