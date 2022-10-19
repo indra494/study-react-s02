@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import axios from 'axios'
 
 function ProductList(props) {
     return (
@@ -13,6 +14,21 @@ function ProductList(props) {
                 })
             }
             </div>
+
+            <button onClick={()=> {
+                axios.get('https://codingapple1.github.io/shop/data2.json')
+                .then((result)=>{                    
+                    props.setShoes( [...result.data,...props.shoes] );
+                }).catch(()=>{
+                    console.log('실패');                    
+                });
+
+                Promise.all([ axios.get('https://codingapple1.github.io/shop/data2.json'), axios.get('https://codingapple1.github.io/shop/data3.json')  ])
+                .then((result)=>{
+                    console.log(result);
+                });
+
+            }}>더보기</button>            
         </div>                 
     )
 }
@@ -64,6 +80,8 @@ function ProductDetail(props) {
                 <button className="btn btn-danger">주문하기</button> 
                 </div>
             </div>
+
+
         </div> 
     )
 }

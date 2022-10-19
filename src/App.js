@@ -22,7 +22,7 @@ let NewBtn = styled.button(YellowBtn);
 
 
 function App() {
-  let [shoes] = useState(data);
+  let [shoes, setShoes] = useState(data);
   let navigate = useNavigate();
 
   return (
@@ -42,7 +42,7 @@ function App() {
       <Box><YellowBtn bg="blue" /></Box>
       
       <Routes>
-        <Route path='/' element={<ProductList shoes={shoes} />} />        
+        <Route path='/' element={<ProductList shoes={shoes} setShoes={setShoes} />} />        
         <Route path='/detail/:id' element={<ProductDetail shoes={shoes} />} />
         <Route path="/about" element={<About />} >
           { /* nasted routes ex) /about/member, /about/location */}
