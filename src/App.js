@@ -2,12 +2,15 @@
 
 import { Button, Navbar, Container, Nav } from 'react-bootstrap'
 import {ProductList, ProductDetail} from './routes/Product'
-import { useState } from 'react'
+import { createContext, useState } from 'react'
 import styled from 'styled-components'
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
 import './App.css';
 import bg from './img/bg.png';
 import data from './data.js'
+import Cart from './routes/Cart'
+
+export let Context1 = createContext();
 
 let YellowBtn = styled.button`
   background : ${ props => props.bg };
@@ -24,6 +27,7 @@ let NewBtn = styled.button(YellowBtn);
 function App() {
   let [shoes, setShoes] = useState(data);
   let navigate = useNavigate();
+  let [stock, setStock] = useState([3,0,0]);
 
   return (
     <div className="App">
@@ -32,7 +36,7 @@ function App() {
           <Navbar.Brand href="#home">ShoeShop</Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Link href="#home"><Link to="/">Home</Link></Nav.Link>
-            <Nav.Link href="#features" onClick={()=> { navigate('/detail') }} >Cart</Nav.Link>
+            <Nav.Link href="#features" onClick={()=> { navigate('/cart') }} >Cart</Nav.Link>
           </Nav>
         </Container>
       </Navbar>
@@ -42,13 +46,24 @@ function App() {
       <Box><YellowBtn bg="blue" /></Box>
       
       <Routes>
-        <Route path='/' element={<ProductList shoes={shoes} setShoes={setShoes} />} />        
-        <Route path='/detail/:id' element={<ProductDetail shoes={shoes} />} />
+        <Route path='/' element={
+          <Context1.Provider value={{ stock }}>
+            <ProductList shoes={shoes} setShoes={setShoes} />
+          </Context1.Provider>   
+        } />        
+        <Route path='/detail/:id' element={
+          <Context1.Provider value={{ stock }}>
+            <ProductDetail shoes={shoes} />
+          </Context1.Provider>            
+        } />
         <Route path="/about" element={<About />} >
           { /* nasted routes ex) /about/member, /about/location */}
           <Route path="member" element={<div>멤버임</div>} />
           <Route path="location" element={<div>위치정보</div>} />          
         </Route>
+
+        <Route path="/cart" element={ <Cart /> } />
+
         <Route path="*" element={<div>404페이지입니다</div>} />
       </Routes>
 

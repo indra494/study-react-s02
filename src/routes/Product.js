@@ -1,8 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Nav } from 'react-bootstrap'
 import axios from 'axios'
+import '../App.css';
+
+import { Context1 } from '../App.js'
+
 
 function ProductList(props) {
+
+    let {stock} = useContext(Context1);
+
     return (
         <div className="container">
             <div className="row">
@@ -14,6 +22,10 @@ function ProductList(props) {
                 })
             }
             </div>
+
+            <span>
+                재고 : {stock[0]}
+            </span>    
 
             <button onClick={()=> {
                 axios.get('https://codingapple1.github.io/shop/data2.json')
@@ -37,6 +49,7 @@ function ProductDetail(props) {
 
     let [count, setCount] = useState(0);
     let [isBox, setBox] = useState(true);
+    let [tab, setTab] = useState(0);
 
     let {id} = useParams();
     let product = props.shoes.find(x=>{
@@ -81,9 +94,40 @@ function ProductDetail(props) {
                 </div>
             </div>
 
+            <Nav variant="tabs" defaultActiveKey="link0">
+                <Nav.Item>
+                    <Nav.Link onClick={()=> { setTab(0); }} eventKey="link0">버튼0</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link onClick={()=> { setTab(1); }} eventKey="link1">버튼1</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link onClick={()=> { setTab(2); }} eventKey="link2">버튼2</Nav.Link>
+                </Nav.Item>
+            </Nav>
+            <TabContent tab={tab} />                     
+
 
         </div> 
     )
+}
+
+function TabContent({tab}) {
+
+    let [fade, setFade] = useState('');
+
+    useEffect(()=>{
+        setTimeout(()=>{ setFade('end'); }, 100);
+
+        return ()=> {
+            setFade('')
+        }
+    },[tab]);
+
+    return <div className={'start ' + fade}>
+    { [<div>내용0</div>,<div>내용1</div>,<div>내용2</div>][tab] }
+    </div>
+
 }
 
 function Product(props) {
